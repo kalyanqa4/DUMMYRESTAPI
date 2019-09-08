@@ -1,0 +1,102 @@
+{
+	"variables": [],
+	"info": {
+		"name": "DUMMYRESTAPI",
+		"_postman_id": "0acc060f-3cfd-f419-4533-bd238ccb55b1",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createNewEmployee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"id should be generated\"] = jsonData.id !== \"\";",
+							"",
+							"postman.setGlobalVariable('empid',jsonData.id);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://dummy.restapiexample.com/api/v1/create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"name\":\"KalyanCh\",\n \"salary\":\"1000\",\n \"age\":\"31\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "verifyEmployeeCreatedinDatabaseusingEmpId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"tests[\"Employee name should be\"] = jsonData.employee_name === \"KalyanCh\";",
+							"tests[\"employee salary should be\"] = jsonData.employee_salary === \"1000\";",
+							"tests[\"Employee age should be\"] = jsonData.employee_age === \"31\";",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://dummy.restapiexample.com/api/v1/employee/{{empid}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "deleteEmployeeRecordFromDatabase",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"tests[\"should have status code is 200\"] = responseCode.code === 200;",
+							"tests[\"should delete the record\"] = jsonData.success.text === \"successfully! deleted Records\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://dummy.restapiexample.com/api/v1/delete/{{empid}}",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
